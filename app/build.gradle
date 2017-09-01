@@ -1,0 +1,54 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.0"
+    defaultConfig {
+        applicationId "wenge.com.myeyepetizekotlin"
+        minSdkVersion 19
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation 'com.android.support:appcompat-v7:26.0.0-beta1'
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    //retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    //自动解析Json 数据
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    //引入OKhttp3 作为 retrofit网络请求的客户端
+    compile 'com.squareup.okhttp3:okhttp:3.8.1'
+    //引入Log拦截器，方便DEBUG模式输出log信息
+    compile 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+    //retrofit 与 rxjava的适配器
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    //rxjava 与 rxandroid
+    compile 'io.reactivex.rxjava2:rxjava:2.1.3'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
+    //图片加载框架
+    compile 'com.github.bumptech.glide:glide:4.0.0'
+    //底部导航栏
+    compile 'com.roughike:bottom-bar:2.3.1'
+}

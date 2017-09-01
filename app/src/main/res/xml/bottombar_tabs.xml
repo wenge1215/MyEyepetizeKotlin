@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        icon="@drawable/home_normal"
+        id="@+id/tab_home"
+        title="@string/home"
+        />
+    <tab
+        icon="@drawable/find_normal"
+        id="@+id/tab_find"
+        title="@string/find"
+        />
+
+    <tab
+        icon="@drawable/hot_normal"
+        id="@+id/tab_hot"
+        title="@string/hot"
+        />
+    <tab
+        icon="@drawable/mine_normal"
+        id="@+id/tab_me"
+        title="@string/mine"
+        />
+</tabs>

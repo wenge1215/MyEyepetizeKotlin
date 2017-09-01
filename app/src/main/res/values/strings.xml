@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MyEyepetizeKotlin</string>
+
+    <string name="home">HEMO</string>
+    <string name="find">FIND</string>
+    <string name="hot">HOT</string>
+    <string name="mine">MINE</string>
+</resources>
