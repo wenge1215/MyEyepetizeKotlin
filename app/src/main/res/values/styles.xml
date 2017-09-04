@@ -15,7 +15,6 @@
     </style>
 
 
-
     <style name="Launch" parent="AppBaseTheme">
         <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryDark">@color/black</item>
@@ -30,5 +29,10 @@
         <item name="android:activityCloseEnterAnimation">@anim/slide_in_right</item>
         <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
     </style>
+
+    <style name="BottomBarStyle">
+        <item name="android:textSize">@dimen/bottom_bar_text_size</item>
+    </style>
+
 
 </resources>

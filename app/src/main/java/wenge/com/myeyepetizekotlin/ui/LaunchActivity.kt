@@ -1,20 +1,17 @@
-package wenge.com.myeyepetizekotlin
+package wenge.com.myeyepetizekotlin.ui
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.animation.*
 import kotlinx.android.synthetic.main.activity_launch.*
+import wenge.com.myeyepetizekotlin.R
 
 class LaunchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_launch)
-
-
-
         gotoMain()
     }
 
@@ -45,7 +42,7 @@ class LaunchActivity : AppCompatActivity() {
             }
 
             override fun onAnimationEnd(animation: Animation?) {
-                val intent = Intent(this@LaunchActivity,MainActivity::class.java)
+                val intent = Intent(this@LaunchActivity, MainActivity::class.java)
                 startActivity(intent)
                 finish()
             }
