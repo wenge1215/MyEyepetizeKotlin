@@ -2,7 +2,7 @@ package wenge.com.myeyepetizekotlin.mvp.contract
 
 import wenge.com.myeyepetizekotlin.base.BasePresenter
 import wenge.com.myeyepetizekotlin.base.BaseView
-import wenge.com.myeyepetizekotlin.mvp.model.HomeBean
+import wenge.com.myeyepetizekotlin.mvp.model.bean.HomeBean
 
 /**
  * Created by WENGE on 2017/9/5.
