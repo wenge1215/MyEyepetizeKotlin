@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.gyf.barlibrary.ImmersionBar
 import com.roughike.bottombar.OnTabSelectListener
 import kotlinx.android.synthetic.main.activity_main.*
 import wenge.com.myeyepetizekotlin.R
@@ -13,14 +14,14 @@ import wenge.com.myeyepetizekotlin.ui.fragment.*
 import java.util.*
 
 const val SEARCH_TAG = "SearchFragment"
+
 class MainActivity : AppCompatActivity(), View.OnClickListener, OnTabSelectListener {
     var homeFragment: HomeFragment? = null
     var findFragment: FindFragment? = null
     var hotFragment: HotFragment? = null
     var mineFragment: MineFragment? = null
 
-    lateinit var searchFragment: SerachFragment
-
+    lateinit var searchFragment: SerachFragment   //lateinit 延时加载
     override fun onClick(p0: View?) {
         searchFragment = SerachFragment()
         searchFragment.show(fragmentManager, SEARCH_TAG)
@@ -29,6 +30,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnTabSelectListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        //透明陶航栏
+        ImmersionBar.with(this).transparentBar().barAlpha(0.3f).fitsSystemWindows(true).init()
+        //设置导航栏按键可见
+        val window = window
+        val params = window.attributes
+        params.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+
         initToolbar()
         initFragmetn(savedInstanceState)
         initView()
@@ -131,7 +139,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnTabSelectListe
                         .hide(hotFragment)
                         .commit()
             }
-
         }
     }
 }

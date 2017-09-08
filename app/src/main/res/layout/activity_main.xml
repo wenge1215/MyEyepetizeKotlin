@@ -15,8 +15,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="0dp"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="0dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -24,18 +24,18 @@
 
             <TextView
                 android:id="@+id/tv_toolbar_title"
-                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:text="搜索"/>
 
             <ImageView
                 android:id="@+id/iv_toolbar_search"
-                android:layout_marginRight="10dp"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/icon_search"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/icon_search"/>
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
@@ -44,14 +44,14 @@
     <FrameLayout
         android:id="@+id/contentContainer"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="457dp"
+        android:layout_marginBottom="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="MissingConstraints"/>
+        tools:ignore="MissingConstraints"
+        />
 
     <com.roughike.bottombar.BottomBar
         android:id="@+id/bottomBar"
@@ -60,12 +60,11 @@
         android:layout_alignParentBottom="true"
         app:bb_tabXmlResource="@xml/bottombar_tabs"
         app:bb_titleTextAppearance="@style/BottomBarStyle"
-        app:layout_constraintBottom_toBottomOf="@+id/contentContainer"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        />
+        tools:ignore="MissingConstraints"/>
 
 
 </android.support.constraint.ConstraintLayout>
