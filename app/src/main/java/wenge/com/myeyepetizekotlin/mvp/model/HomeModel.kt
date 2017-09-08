@@ -1,33 +1,25 @@
 package wenge.com.myeyepetizekotlin.mvp.model
 
+import android.content.Context
+import io.reactivex.Observable
+import wenge.com.myeyepetizekotlin.mvp.model.bean.HomeBean
+import wenge.com.myeyepetizekotlin.network.ApiServer
+import wenge.com.myeyepetizekotlin.network.RetrofitClient
+
 /**
  * Created by WENGE on 2017/9/5.
- * 备注：操作数据
+ * 备注：请求网络获取数据
  */
 
 
-data class HomeBean(var nextPageUrl: String?,var nextPublishTime: Long,
-                    var newestIssueType: String?,var dialog: Any?,
-                    var issueList: List<IssueListBean>?) {
+class HomeModel {
+    fun loadData(context: Context, isFirst: Boolean, data: String, num: String): Observable<HomeBean>? {
+        val retrofitClient = RetrofitClient.getInstance(context, ApiServer.BASE_URL)
+        var api = retrofitClient.create(ApiServer::class.java)
+        when (isFirst) {
+            true -> return api?.getHomeData()
 
-    data class IssueListBean(var releaseTime: Long,var type: String?,
-                             var date: Long,var publishTime: Long,var count: Int,
-                             var itemList: List<ItemListBean>?) {
-
-        data class ItemListBean(var type: String?,var data: DataBean?,var tag: Any?) {
-
-            data class DataBean(var dataType: String?,var id: Int,var title: String?,
-                                var description:String?, var image: String?,var actionUrl: String?,
-                                var adTrack: Any?,var isShade: Boolean,
-                                var label: Any?,var labelList: Any?,var header: Any?, var category: String?,
-                                var duration: Long?,var playUrl: String,var cover: CoverBean?,var author: AuthorBean?,
-                                var releaseTime : Long?,var consumption: ConsumptionBean?) {
-                data class CoverBean(var feed : String?,var detail : String?,
-                                     var blurred : String?,var sharing : String?,var homepage:String?){}
-                data class ConsumptionBean(var collectionCount: Int,var shareCount: Int, var replyCount: Int) {
-                }
-                data class AuthorBean(var icon: String){}
-            }
+            false -> return api?.getHomeMoreData(data, num)
         }
     }
 }
