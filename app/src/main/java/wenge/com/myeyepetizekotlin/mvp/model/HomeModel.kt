@@ -13,13 +13,13 @@ import wenge.com.myeyepetizekotlin.network.RetrofitClient
 
 
 class HomeModel {
-    fun loadData(context: Context, isFirst: Boolean, data: String, num: String): Observable<HomeBean>? {
+    fun loadData(context: Context, isFirst: Boolean, data: String?): Observable<HomeBean>? {
         val retrofitClient = RetrofitClient.getInstance(context, ApiServer.BASE_URL)
         var api = retrofitClient.create(ApiServer::class.java)
         when (isFirst) {
             true -> return api?.getHomeData()
 
-            false -> return api?.getHomeMoreData(data, num)
+            false -> return api?.getHomeMoreData(data.toString(), "2")
         }
     }
 }

@@ -30,7 +30,7 @@ class HomePresenter(context: Context, view: HomeContract.View) : HomeContract.Pr
      * 请求首页数据
      */
     override fun requestData() {
-        val observable : Observable<HomeBean>? = mContext?.let { mModel.loadData(it,true,"0","1") }
+        val observable : Observable<HomeBean>? = mContext?.let { mModel.loadData(it,true,"0") }
         observable?.applySchedulers()?.subscribe { homeBean : HomeBean ->
             mView?.setData(homeBean)
         }
@@ -40,8 +40,8 @@ class HomePresenter(context: Context, view: HomeContract.View) : HomeContract.Pr
      * 加载更多数据
      *
      */
-    fun moreData(data: String?,num:String?){
-        val observable : Observable<HomeBean>? = mContext?.let { mModel.loadData(it,false, data!!, num!!) }
+    fun moreData(data: String?){
+        val observable : Observable<HomeBean>? = mContext?.let { mModel.loadData(it,false, data!!) }
         observable?.applySchedulers()?.subscribe { homeBean : HomeBean ->
             mView?.setData(homeBean)
         }

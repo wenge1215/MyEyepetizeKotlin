@@ -24,7 +24,7 @@ class HomeAdapter(val list: MutableList<HomeBean.IssueListBean.ItemListBean>?, v
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): HomeViewHolder {
-        val view = LayoutInflater.from(parent?.context).inflate(R.layout.item_home, parent, false)
+        val view = LayoutInflater.from(parent?.context).inflate(R.layout.item_home, null, false)
         return HomeViewHolder(view, itemClick)
     }
 

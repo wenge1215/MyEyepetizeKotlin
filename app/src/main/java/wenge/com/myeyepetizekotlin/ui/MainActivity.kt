@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnTabSelectListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //透明陶航栏
+        //透明导航栏
         ImmersionBar.with(this).transparentBar().barAlpha(0.3f).fitsSystemWindows(true).init()
         //设置导航栏按键可见
         val window = window
