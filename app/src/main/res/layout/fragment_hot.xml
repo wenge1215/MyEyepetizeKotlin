@@ -13,9 +13,9 @@
         android:scrollIndicators="bottom"
         app:tabIndicatorColor="@color/black"></android.support.design.widget.TabLayout>
 
-    <org.jetbrains.anko.support.v4._ViewPager
+    <android.support.v4.view.ViewPager
         android:id="@+id/vp_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></org.jetbrains.anko.support.v4._ViewPager>
+        android:layout_height="match_parent"></android.support.v4.view.ViewPager>
 
 </LinearLayout>

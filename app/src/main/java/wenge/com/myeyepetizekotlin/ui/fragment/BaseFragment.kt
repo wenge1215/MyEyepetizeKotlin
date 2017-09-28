@@ -2,6 +2,7 @@ package wenge.com.myeyepetizekotlin.ui.fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,5 +62,17 @@ abstract class BaseFragment : Fragment() {
 
     abstract fun getLayoutId(): Int
 
+    public fun dp2px(dp: Int): Int {
+        return TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(),
+                resources.displayMetrics).toInt()
 
+
+    }
+
+    public fun sp2px(sp: Int): Int {
+        return TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_SP, sp.toFloat(),
+                resources.displayMetrics).toInt()
+    }
 }
