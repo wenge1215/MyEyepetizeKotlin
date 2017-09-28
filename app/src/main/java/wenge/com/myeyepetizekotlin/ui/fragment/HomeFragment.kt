@@ -1,5 +1,7 @@
 package wenge.com.myeyepetizekotlin.ui.fragment
 
+import android.content.Intent
+import android.os.Parcelable
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -9,9 +11,13 @@ import org.jetbrains.anko.support.v4.toast
 import wenge.com.myeyepetizekotlin.R
 import wenge.com.myeyepetizekotlin.mvp.contract.HomeContract
 import wenge.com.myeyepetizekotlin.mvp.model.bean.HomeBean
+import wenge.com.myeyepetizekotlin.mvp.model.bean.VideoBean
 import wenge.com.myeyepetizekotlin.mvp.presenter.HomePresenter
+import wenge.com.myeyepetizekotlin.ui.VideoDetailActivity
 import wenge.com.myeyepetizekotlin.ui.adapter.HomeAdapter
-import java.util.regex.Pattern
+import wenge.com.myeyepetizekotlin.utils.ObjectSaveUtils
+import wenge.com.myeyepetizekotlin.utils.SPUtils
+import wenge.com.myeyepetizekotlin.utils.getNextPageUrl
 
 /**
  * Created by WENGE on 2017/9/5.
@@ -43,15 +49,24 @@ class HomeFragment : BaseFragment(), HomeContract.View, SwipeRefreshLayout.OnRef
         mPresenter?.start()     //开启请求
         refresh.setOnRefreshListener(this)
 
+        /**
+         * 创建适配器并实现RecyclerView条目点击事件
+         */
         mAdapter = HomeAdapter(mList) {
             toast(it.data?.title.toString())
+            //跳转到Video详情界面
+            goToVideoDetail(it.data)
+
+
         }
 
         recycler.layoutManager = LinearLayoutManager(context)
         recycler.adapter = mAdapter
 
 
-
+        /**
+         * 监听RecyclerView滚动，加载更多
+         */
         recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -69,14 +84,50 @@ class HomeFragment : BaseFragment(), HomeContract.View, SwipeRefreshLayout.OnRef
     }
 
     /**
+     * 跳转到Video详情界面
+     */
+    private fun goToVideoDetail(data: HomeBean.IssueListBean.ItemListBean.DataBean?) {
+        var intent: Intent = Intent(context, VideoDetailActivity::class.java)
+        //跳转视频详情页
+//        var title = data?.title
+//        var photo = data?.cover?.feed
+//        var desc = data?.description
+//        var duration = data?.duration
+        var playUrl = data?.playUrl
+//        var category = data?.category
+//        var blurred = data?.cover?.blurred
+//        var collect = data?.consumption?.collectionCount
+//        var share = data?.consumption?.shareCount
+//        var reply = data?.consumption?.replyCount
+//        var time = System.currentTimeMillis()
+        var videoBean = VideoBean(data?.cover?.feed, data?.title,
+                data?.description, data?.duration, playUrl,
+                data?.category, data?.cover?.blurred,
+                data?.consumption?.collectionCount, data?.consumption?.shareCount,
+                data?.consumption?.replyCount, System.currentTimeMillis())
+
+        var url = SPUtils.getInstance(context!!, "beans").getString(playUrl!!)
+        if (url.equals("")) {
+            var count = SPUtils.getInstance(context!!, "beans").getInt("count")
+            if (count != -1) {
+                count = count.inc()
+            } else {
+                count = 1
+            }
+            SPUtils.getInstance(context!!, "beans").put("count", count)
+            SPUtils.getInstance(context!!, "beans").put(playUrl!!, playUrl)
+            ObjectSaveUtils.saveObject(context!!, "bean$count", videoBean)
+        }
+        intent.putExtra("data", videoBean as Parcelable)
+        context?.let { context -> context.startActivity(intent) }
+    }
+
+    /**
      * 绑定数据
      */
     override fun setData(bean: HomeBean) {
-        val regEx = "[^0-9]"
-        val p = Pattern.compile(regEx)
-        val m = p.matcher(bean?.nextPageUrl)
-        Log.e("m", m.toString())
-        data = m.replaceAll("").subSequence(1, m.replaceAll("").length - 1).toString()
+
+        data = getNextPageUrl(bean.nextPageUrl as CharSequence?)
         if (isRefrash) {
             isRefrash = false
             refresh.isRefreshing = false

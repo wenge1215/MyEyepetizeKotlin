@@ -21,16 +21,26 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            def requested = details.requested
+            if (requested.group == 'com.android.support') {
+                if (!requested.name.startsWith("multidex")) {
+                    details.useVersion '25.3.0'
+                }
+            }
+        }
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     //noinspection GradleCompatible,GradleDependency
-    implementation 'com.android.support:appcompat-v7:26.0.0-beta1'
+    implementation 'com.android.support:appcompat-v7:26.0.0'
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile "org.jetbrains.anko:anko:$anko_version"
@@ -55,4 +65,11 @@ dependencies {
     compile 'com.gyf.barlibrary:barlibrary:2.2.9'
     //flexbox
     compile 'com.google.android:flexbox:0.3.0-alpha2'
+    //视频播放器
+    compile 'com.shuyu:GSYVideoPlayer:2.0.7'
+    //基于rxjava的下载管理器
+    compile 'zlc.season:rxdownload2:2.0.4'
+    //6.0动态权限
+    compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
+
 }
