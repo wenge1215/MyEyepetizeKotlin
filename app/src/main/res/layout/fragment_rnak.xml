@@ -2,12 +2,12 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="wenge.com.myeyepetizekotlin.ui.fragment.MonthFragment">
+             tools:context="wenge.com.myeyepetizekotlin.ui.fragment.RnakFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/iv_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="月排行"/>
+        android:layout_height="match_parent"/>
 
 </FrameLayout>
