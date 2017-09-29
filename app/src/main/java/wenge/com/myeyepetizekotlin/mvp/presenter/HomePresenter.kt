@@ -15,7 +15,7 @@ import wenge.com.myeyepetizekotlin.utils.applySchedulers
 class HomePresenter(context: Context, view: HomeContract.View) : HomeContract.Presenter {
     var mContext : Context? = null
     var mView : HomeContract.View? = null
-    val mModel : HomeModel by lazy {
+    val mModel : HomeModel by lazy {            //延迟加载
         HomeModel()
     }
     init {

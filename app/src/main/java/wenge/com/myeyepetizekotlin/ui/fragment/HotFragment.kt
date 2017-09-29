@@ -3,8 +3,9 @@ package wenge.com.myeyepetizekotlin.ui.fragment
 import android.support.v4.app.Fragment
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.fragment_hot.*
+import org.jetbrains.anko.support.v4.dip
 import wenge.com.myeyepetizekotlin.R
-import wenge.com.myeyepetizekotlin.ui.adapter.HotAdapter
+import wenge.com.myeyepetizekotlin.ui.adapter.HotPageAdapter
 
 /**
  * Created by WENGE on 2017/9/5.
@@ -21,12 +22,12 @@ class HotFragment : BaseFragment() {
     }
 
     private fun initFragments() {
-        var weekFragment: Fragment = RnakFragment.newInstance("week")
-        var monthFragmetn: Fragment = RnakFragment.newInstance("month")
+        var weekFragment: Fragment = RnakFragment.newInstance("weekly")
+        var monthFragmetn: Fragment = RnakFragment.newInstance("monthly")
         var fragmets: ArrayList<Fragment>? = ArrayList()
         fragmets?.add(weekFragment)
         fragmets?.add(monthFragmetn)
-        vp_content.adapter = HotAdapter(fragmentManager, fragmets!!, title)
+        vp_content.adapter = HotPageAdapter(fragmentManager, fragmets!!, title)
 
         tl_navi.setupWithViewPager(vp_content)
     }
@@ -34,7 +35,7 @@ class HotFragment : BaseFragment() {
 
     private fun initTablayout() {
         val childAt = tl_navi.getChildAt(0) as LinearLayout
-        childAt.dividerPadding = dp2px(10)
+        childAt.dividerPadding = dip(10)
         childAt.dividerDrawable = context.resources.getDrawable(R.drawable.div)
         childAt.showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
     }
