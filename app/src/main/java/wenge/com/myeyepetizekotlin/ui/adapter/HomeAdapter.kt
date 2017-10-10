@@ -37,20 +37,7 @@ class HomeAdapter(val list: MutableList<HomeBean.IssueListBean.ItemListBean>?, v
         fun bindData(data: HomeBean.IssueListBean.ItemListBean) {
             var title = data?.data?.title
             var category = data?.data?.category
-//            var minute = data?.data?.duration?.div(60)
-//            var second = data?.data?.duration?.minus((minute?.times(60)) as Long)
-//            var realMinute: String
-//            var realSecond: String
-//            if (minute!! < 10) {
-//                realMinute = "0" + minute
-//            } else {
-//                realMinute = minute.toString()
-//            }
-//            if (second!! < 10) {
-//                realSecond = "0" + second
-//            } else {
-//                realSecond = second.toString()
-//            }
+
             val longToTime = TimeUtils.LongToTime(data?.data?.duration!!)
             var playUrl = data?.data?.playUrl
             var photo = data?.data?.cover?.feed
@@ -58,7 +45,7 @@ class HomeAdapter(val list: MutableList<HomeBean.IssueListBean.ItemListBean>?, v
             with(data) {
                 ImageLoadUtils.display(itemView.context, photo as String, itemView.iv_photo)
                 itemView.tv_title.text = title
-                itemView.tv_detail.text = "发布于 $category / longToTime"
+                itemView.tv_detail.text = "发布于 $category / $longToTime"
                 if (author != null) {
                     ImageLoadUtils.display(itemView.context, author.icon as String, itemView.iv_user)
                 } else {

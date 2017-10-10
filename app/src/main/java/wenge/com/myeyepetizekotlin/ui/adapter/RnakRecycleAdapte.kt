@@ -1,8 +1,11 @@
 package wenge.com.myeyepetizekotlin.ui.adapter
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.adapter_rnak_item.view.*
@@ -17,8 +20,8 @@ import wenge.com.myeyepetizekotlin.utils.TimeUtils
  */
 
 
-class RnakRecycleAdapte(val context: Context, var hotBean: HotBean) : RecyclerView.Adapter<RnakRecycleAdapte.ViewHolder>() {
-    override fun getItemCount(): Int = hotBean.itemList?.size!!
+class RnakRecycleAdapte(val context: Context, var list: ArrayList<HotBean.ItemListBean.DataBean>) : RecyclerView.Adapter<RnakRecycleAdapte.ViewHolder>() {
+    override fun getItemCount(): Int = list?.size!!
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.adapter_rnak_item, parent, false)
@@ -27,17 +30,58 @@ class RnakRecycleAdapte(val context: Context, var hotBean: HotBean) : RecyclerVi
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.bindData(hotBean, position)
+        holder?.bindData(list, position)
     }
 
 
     class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-        fun bindData(hotBean: HotBean, position: Int) {
-            val dataBean: HotBean.ItemListBean.DataBean = hotBean.itemList?.get(position)?.data!!
+        fun bindData(list: ArrayList<HotBean.ItemListBean.DataBean>, position: Int) {
+            val dataBean = list?.get(position)
             ImageLoadUtils.display(itemView.context, dataBean.cover?.feed!!, itemView.iv_photo)
             itemView.tv_title.text = dataBean.title
             itemView.tv_time.text = "${dataBean.type}/${TimeUtils.LongToTime(dataBean.duration)}"
             itemView.tv_description.text = dataBean.description
+            itemView.setOnClickListener { initAnimation() }
+
+            itemView.setOnTouchListener { view, motionEvent ->
+                initEvent(motionEvent)
+
+            }
+        }
+
+        private fun initEvent(motionEvent: MotionEvent): Boolean {
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> print("ACTION_DOWN")
+                MotionEvent.ACTION_MOVE -> print("ACTION_MOVE")
+                MotionEvent.ACTION_UP -> print("ACTION_UP")
+            }
+            return false
+        }
+
+        private fun initAnimation() {
+//            // 步骤1：设置需要组合的动画效果
+//            ObjectAnimator translation = ObjectAnimator.ofFloat(mButton, "translationX", curTranslationX, 300,curTranslationX);
+//            // 平移动画
+//             ObjectAnimator rotate = ObjectAnimator.ofFloat(mButton, "rotation", 0f, 360f);
+//            // 旋转动画
+//             ObjectAnimator alpha = ObjectAnimator.ofFloat(mButton, "alpha", 1f, 0f, 1f);
+//            // 透明度动画
+//            // 步骤2：创建组合动画的对象
+//            // AnimatorSet animSet = new AnimatorSet();
+//            // 步骤3：根据需求组合动画
+//            animSet.play(translation).with(rotate).before(alpha);
+//            animSet.setDuration(5000);
+//            // 步骤4：启动动画
+//             animSet.start();
+
+            var scaleX: ObjectAnimator = ObjectAnimator.ofFloat(itemView, "scaleX", 1f, 0.8f, 1f)
+            var scaleY: ObjectAnimator = ObjectAnimator.ofFloat(itemView, "scaleY", 1f, 0.8f, 1f)
+            var alpha: ObjectAnimator = ObjectAnimator.ofFloat(itemView, "alpha", 1f, 0.5f, 1f)
+            var aniSet: AnimatorSet = AnimatorSet()
+            aniSet.play(scaleX).with(scaleY)
+            aniSet.duration = 200
+            aniSet.start()
+
         }
     }
 }

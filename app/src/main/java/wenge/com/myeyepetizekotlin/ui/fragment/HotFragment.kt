@@ -23,7 +23,7 @@ class HotFragment : BaseFragment() {
 
     private fun initFragments() {
         var weekFragment: Fragment = RnakFragment.newInstance("weekly")
-        var monthFragmetn: Fragment = RnakFragment.newInstance("monthly")
+        var monthFragmetn: Fragment = RnakFragment.newInstance("historical")
         var fragmets: ArrayList<Fragment>? = ArrayList()
         fragmets?.add(weekFragment)
         fragmets?.add(monthFragmetn)
