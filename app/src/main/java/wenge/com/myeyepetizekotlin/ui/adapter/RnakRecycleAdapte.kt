@@ -1,11 +1,10 @@
 package wenge.com.myeyepetizekotlin.ui.adapter
 
+import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.adapter_rnak_item.view.*
@@ -20,12 +19,13 @@ import wenge.com.myeyepetizekotlin.utils.TimeUtils
  */
 
 
-class RnakRecycleAdapte(val context: Context, var list: ArrayList<HotBean.ItemListBean.DataBean>) : RecyclerView.Adapter<RnakRecycleAdapte.ViewHolder>() {
+class RnakRecycleAdapte(val list: ArrayList<HotBean.ItemListBean.DataBean>, val itemClick: (HotBean.ItemListBean.DataBean) -> Any) :
+        RecyclerView.Adapter<RnakRecycleAdapte.ViewHolder>() {
     override fun getItemCount(): Int = list?.size!!
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.adapter_rnak_item, parent, false)
-        return ViewHolder(view)
+        val view = LayoutInflater.from(parent?.context).inflate(R.layout.adapter_rnak_item, parent, false)
+        return ViewHolder(view, itemClick)
 
     }
 
@@ -34,31 +34,24 @@ class RnakRecycleAdapte(val context: Context, var list: ArrayList<HotBean.ItemLi
     }
 
 
-    class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View?, val itemClick: (HotBean.ItemListBean.DataBean) -> Any) : RecyclerView.ViewHolder(itemView) {
+
         fun bindData(list: ArrayList<HotBean.ItemListBean.DataBean>, position: Int) {
             val dataBean = list?.get(position)
             ImageLoadUtils.display(itemView.context, dataBean.cover?.feed!!, itemView.iv_photo)
             itemView.tv_title.text = dataBean.title
             itemView.tv_time.text = "${dataBean.type}/${TimeUtils.LongToTime(dataBean.duration)}"
             itemView.tv_description.text = dataBean.description
-            itemView.setOnClickListener { initAnimation() }
+            with(dataBean) {
+                itemView.setOnClickListener {
+                    initAnimation(dataBean)
 
-            itemView.setOnTouchListener { view, motionEvent ->
-                initEvent(motionEvent)
-
+                }
             }
+
         }
 
-        private fun initEvent(motionEvent: MotionEvent): Boolean {
-            when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN -> print("ACTION_DOWN")
-                MotionEvent.ACTION_MOVE -> print("ACTION_MOVE")
-                MotionEvent.ACTION_UP -> print("ACTION_UP")
-            }
-            return false
-        }
-
-        private fun initAnimation() {
+        private fun initAnimation(dataBean: HotBean.ItemListBean.DataBean) {
 //            // 步骤1：设置需要组合的动画效果
 //            ObjectAnimator translation = ObjectAnimator.ofFloat(mButton, "translationX", curTranslationX, 300,curTranslationX);
 //            // 平移动画
@@ -78,9 +71,28 @@ class RnakRecycleAdapte(val context: Context, var list: ArrayList<HotBean.ItemLi
             var scaleY: ObjectAnimator = ObjectAnimator.ofFloat(itemView, "scaleY", 1f, 0.8f, 1f)
             var alpha: ObjectAnimator = ObjectAnimator.ofFloat(itemView, "alpha", 1f, 0.5f, 1f)
             var aniSet: AnimatorSet = AnimatorSet()
-            aniSet.play(scaleX).with(scaleY)
+            aniSet.play(scaleX).with(scaleY).with(alpha)
             aniSet.duration = 200
             aniSet.start()
+            aniSet.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(p0: Animator?) {
+
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+
+                }
+
+                override fun onAnimationStart(p0: Animator?) {
+
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    itemClick(dataBean)
+                }
+
+
+            })
 
         }
     }

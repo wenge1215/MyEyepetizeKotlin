@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnTabSelectListe
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         //透明导航栏
-        ImmersionBar.with(this).transparentBar().barAlpha(0.3f).fitsSystemWindows(true).init()
+        ImmersionBar.with(this).transparentBar().barAlpha(0.2f).fitsSystemWindows(true).statusBarDarkFont(true).init()
         //设置导航栏按键可见
         val window = window
         val params = window.attributes
