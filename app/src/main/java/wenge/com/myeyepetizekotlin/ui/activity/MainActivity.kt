@@ -1,7 +1,9 @@
-package wenge.com.myeyepetizekotlin.ui
+package wenge.com.myeyepetizekotlin.ui.activity
 
+import android.annotation.SuppressLint
 import android.graphics.Typeface
 import android.os.Bundle
+import android.support.annotation.ColorRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
@@ -20,6 +22,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnTabSelectListe
     var findFragment: FindFragment? = null
     var hotFragment: HotFragment? = null
     var mineFragment: MineFragment? = null
+    var immersionBar: ImmersionBar? = null
 
     lateinit var searchFragment: SerachFragment   //lateinit 延时加载
     override fun onClick(p0: View?) {
@@ -27,11 +30,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnTabSelectListe
         searchFragment.show(fragmentManager, SEARCH_TAG)
     }
 
+
+    @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         //透明导航栏
-        ImmersionBar.with(this).transparentBar().barAlpha(0.2f).fitsSystemWindows(true).statusBarDarkFont(true).init()
+        immersionBar = ImmersionBar.with(this)
+        immersionBar?.statusBarColor(R.color.colorAccent)?.barAlpha(0.2f)?.fitsSystemWindows(true)?.statusBarDarkFont(true)?.init()
         //设置导航栏按键可见
         val window = window
         val params = window.attributes
@@ -106,6 +112,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnTabSelectListe
         val beginTransaction: FragmentTransaction = supportFragmentManager.beginTransaction()
         when (tabId) {
             R.id.tab_home -> {
+                setBackground(R.color.colorAccent)
                 iv_toolbar_search.setImageResource(R.drawable.icon_search)
                 beginTransaction.show(homeFragment)
                         .hide(findFragment)
@@ -115,6 +122,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnTabSelectListe
             }
 
             R.id.tab_find -> {
+                setBackground(R.color.colorAccentT)
                 iv_toolbar_search.setImageResource(R.drawable.icon_search)
                 beginTransaction.show(findFragment)
                         .hide(homeFragment)
@@ -124,6 +132,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnTabSelectListe
             }
 
             R.id.tab_hot -> {
+                setBackground(R.color.colorAccentS)
                 iv_toolbar_search.setImageResource(R.drawable.icon_search)
                 beginTransaction.show(hotFragment)
                         .hide(homeFragment)
@@ -132,6 +141,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnTabSelectListe
                         .commit()
             }
             R.id.tab_me -> {
+                setBackground(R.color.colorAccentF)
                 iv_toolbar_search.setImageResource(R.drawable.icon_setting)
                 beginTransaction.show(mineFragment)
                         .hide(homeFragment)
@@ -140,5 +150,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnTabSelectListe
                         .commit()
             }
         }
+    }
+
+    public fun setBackground(@ColorRes statusBarColor: Int) {
+        immersionBar?.statusBarColor(statusBarColor)?.barAlpha(0.2f)?.fitsSystemWindows(true)?.statusBarDarkFont(true)?.init()
+        toolbar_search.setBackgroundResource(statusBarColor)
+
     }
 }

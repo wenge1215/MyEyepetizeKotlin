@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/cl_bg"
-    tools:context="wenge.com.myeyepetizekotlin.ui.LaunchActivity"
+    tools:context="wenge.com.myeyepetizekotlin.ui.activity.LaunchActivity"
     android:background="@drawable/tk">
 
     <ImageView

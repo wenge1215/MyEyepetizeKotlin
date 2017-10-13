@@ -1,5 +1,6 @@
 package wenge.com.myeyepetizekotlin.ui.fragment
 
+import android.content.Intent
 import android.graphics.Canvas
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
@@ -7,11 +8,11 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import kotlinx.android.synthetic.main.fragment_find.*
-import org.jetbrains.anko.support.v4.toast
 import wenge.com.myeyepetizekotlin.R
 import wenge.com.myeyepetizekotlin.mvp.contract.FindContract
 import wenge.com.myeyepetizekotlin.mvp.model.bean.FindBean
 import wenge.com.myeyepetizekotlin.mvp.presenter.FindPresenter
+import wenge.com.myeyepetizekotlin.ui.activity.FindDetailActivity
 import wenge.com.myeyepetizekotlin.ui.adapter.FindAdapter
 import java.util.*
 
@@ -102,7 +103,7 @@ class FindFragment : BaseFragment(), FindContract.View {
     override fun setData(findBeans: MutableList<FindBean>) {
         datas = findBeans
         mAdapter = FindAdapter(datas!!) {
-            toast(it.name)
+            activity.startActivity(Intent(context, FindDetailActivity::class.java).putExtra("type", it.name))
         }
         recycler_find.adapter = mAdapter
 

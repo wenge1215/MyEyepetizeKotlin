@@ -22,12 +22,18 @@ class CacheInterceptor(context: Context) : Interceptor {
     override fun intercept(chain: Interceptor.Chain?): Response? {
         var request = chain?.request()
         if (NetworkUtils.isNetConneted(context)) {
-            val response = chain?.proceed(request)
-            // read from cache for 60 s (在线缓存过期时间)
-            val maxAge = 60
-            val cacheControl = request?.cacheControl().toString()
-            Log.e("CacheInterceptor", "6s load cahe" + cacheControl)
-            return response?.newBuilder()?.removeHeader("Pragma")?.removeHeader("Cache-Control")?.header("Cache-Control", "public, max-age=" + maxAge)?.build()
+            val response: Response?
+            val maxAge: Int
+            val cacheControl: String
+
+                response = chain?.proceed(request)
+                // read from cache for 60 s (在线缓存过期时间)
+                maxAge = 60
+                cacheControl = request?.cacheControl().toString()
+                Log.e("CacheInterceptor", "6s load cahe" + cacheControl)
+                return response?.newBuilder()?.removeHeader("Pragma")?.removeHeader("Cache-Control")?.header("Cache-Control", "public, max-age=" + maxAge)?.build()
+
+
         } else {
             Log.e("CacheInterceptor", " no network load cahe")
             request = request?.newBuilder()?.cacheControl(CacheControl.FORCE_CACHE)?.build()

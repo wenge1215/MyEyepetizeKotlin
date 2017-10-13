@@ -3,6 +3,7 @@ package wenge.com.myeyepetizekotlin.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import android.util.Log
 
 /**
  * Created by WENGE on 2017/8/31.
@@ -21,7 +22,7 @@ object NetworkUtils {
         if (networkInfo == null) {
             return false
         } else {
-            return networkInfo.isAvailable && networkInfo.isConnected
+            return networkInfo.isConnected && isAvailableByPing(null)
         }
     }
 
@@ -37,10 +38,35 @@ object NetworkUtils {
         if (networkInfo == null) {
             return false
         } else {
-            return networkInfo.isAvailable && networkInfo.isConnected
+            return networkInfo.isConnected && isAvailableByPing(null)
         }
     }
 
+    /**
+     * 判断网络是否可用
+     *
+     * 需添加权限 `<uses-permission android:name="android.permission.INTERNET"/>`
+     *
+     * 需要异步ping，如果ping不通就说明网络不可用
+     *
+     * @param ip ip地址（自己服务器ip），如果为空，ip为阿里巴巴公共ip
+     * @return `true`: 可用<br></br>`false`: 不可用
+     */
+    fun isAvailableByPing(ip: String?): Boolean {
+        var ip = ip
+        if (ip == null || ip.length <= 0) {
+            ip = "223.5.5.5"// 阿里巴巴公共ip
+        }
+        val result = ShellUtils.execCmd(String.format("ping -c 1 %s", ip), false)
+        val ret = result.result == 0
+        if (result.errorMsg != null) {
+            Log.d("NetworkUtils", "isAvailableByPing() called" + result.errorMsg)
+        }
+        if (result.successMsg != null) {
+            Log.d("NetworkUtils", "isAvailableByPing() called" + result.successMsg)
+        }
+        return ret
+    }
 
     /**
      * 移动网络连接是否可用

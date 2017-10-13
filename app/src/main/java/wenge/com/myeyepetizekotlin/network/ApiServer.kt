@@ -30,9 +30,20 @@ interface ApiServer {
     @GET("v2/categories?udid=26868b32e808498db32fd51fb422d00175e179df&vc=83")
     fun getFindData(): Observable<MutableList<FindBean>>
 
+    //发现详情首页
+    //v3/videos?categoryName=%E6%97%B6%E5%B0%9A&strategy=date&udid=26868b32e808498db32fd51fb422d00175e179df&vc=83
+    @GET("v3/videos?strategy=date&udid=26868b32e808498db32fd51fb422d00175e179df&vc=83")
+    fun getfindDetail(@Query("categoryName") cn: String):Observable<HotBean>
+
+    //发现详情页————加载更多
+    //v3/videos?start=10&num=10&categoryName=%E8%BF%90%E5%8A%A8&strategy=date
+    @GET("v3/videos?num=10&strategy=date")
+    fun getMoreFindDeatil(@Query("categoryName") cn: String, @Query("start") index: Int):Observable<HotBean>
+
+
     //获取热门排行信息
     @GET("v3/ranklist")
     fun getHotData(@Query("num") num: Int, @Query("strategy") strategy: String,
-                   @Query("udid") udid:String = "26868b32e808498db32fd51fb422d00175e179df", @Query("vc") vc: Int = 83): Observable<HotBean>
+                   @Query("udid") udid: String = "26868b32e808498db32fd51fb422d00175e179df", @Query("vc") vc: Int = 83): Observable<HotBean>
 
 }

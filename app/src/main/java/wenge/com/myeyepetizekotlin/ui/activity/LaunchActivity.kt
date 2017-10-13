@@ -1,4 +1,4 @@
-package wenge.com.myeyepetizekotlin.ui
+package wenge.com.myeyepetizekotlin.ui.activity
 
 import android.content.Intent
 import android.os.Bundle

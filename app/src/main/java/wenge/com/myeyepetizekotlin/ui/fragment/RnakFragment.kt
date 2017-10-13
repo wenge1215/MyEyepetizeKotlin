@@ -20,7 +20,7 @@ import wenge.com.myeyepetizekotlin.mvp.contract.HotContract
 import wenge.com.myeyepetizekotlin.mvp.model.bean.HotBean
 import wenge.com.myeyepetizekotlin.mvp.model.bean.VideoBean
 import wenge.com.myeyepetizekotlin.mvp.presenter.HotPresenter
-import wenge.com.myeyepetizekotlin.ui.VideoDetailActivity
+import wenge.com.myeyepetizekotlin.ui.activity.VideoDetailActivity
 import wenge.com.myeyepetizekotlin.ui.adapter.RnakRecycleAdapte
 import wenge.com.myeyepetizekotlin.utils.ObjectSaveUtils
 import wenge.com.myeyepetizekotlin.utils.SPUtils

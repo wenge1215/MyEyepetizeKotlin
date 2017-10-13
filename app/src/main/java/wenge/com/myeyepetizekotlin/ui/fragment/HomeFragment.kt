@@ -13,7 +13,7 @@ import wenge.com.myeyepetizekotlin.mvp.contract.HomeContract
 import wenge.com.myeyepetizekotlin.mvp.model.bean.HomeBean
 import wenge.com.myeyepetizekotlin.mvp.model.bean.VideoBean
 import wenge.com.myeyepetizekotlin.mvp.presenter.HomePresenter
-import wenge.com.myeyepetizekotlin.ui.VideoDetailActivity
+import wenge.com.myeyepetizekotlin.ui.activity.VideoDetailActivity
 import wenge.com.myeyepetizekotlin.ui.adapter.HomeAdapter
 import wenge.com.myeyepetizekotlin.utils.ObjectSaveUtils
 import wenge.com.myeyepetizekotlin.utils.SPUtils
