@@ -38,7 +38,7 @@ interface ApiServer {
     //发现详情页————加载更多
     //v3/videos?start=10&num=10&categoryName=%E8%BF%90%E5%8A%A8&strategy=date
     @GET("v3/videos?num=10&strategy=date")
-    fun getMoreFindDeatil(@Query("categoryName") cn: String, @Query("start") index: Int):Observable<HotBean>
+    fun getMoreFindDeatil(@Query("categoryName") cn: String, @Query("start") index: String):Observable<HotBean>
 
 
     //获取热门排行信息

@@ -19,7 +19,7 @@ class FindDetailModel() {
         return create?.getfindDetail(type)
     }
 
-    fun loadMoreData(context: Context, type: String, index: Int): Observable<HotBean>? {
+    fun loadMoreData(context: Context, type: String, index: String): Observable<HotBean>? {
         val instance = RetrofitClient.getInstance(context, ApiServer.BASE_URL)
         val create = instance.create(ApiServer::class.java)
         return create?.getMoreFindDeatil(type, index)

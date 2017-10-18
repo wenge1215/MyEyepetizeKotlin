@@ -1,8 +1,10 @@
 package wenge.com.myeyepetizekotlin.ui.fragment
 
 import android.app.DialogFragment
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
+import android.text.TextUtils
 import android.util.Log
 import android.view.*
 import com.google.android.flexbox.FlexDirection
@@ -12,6 +14,7 @@ import kotlinx.android.synthetic.main.fragment_serach.*
 import org.jetbrains.anko.toast
 import wenge.com.myeyepetizekotlin.R
 import wenge.com.myeyepetizekotlin.serach.CircularRevealAnim
+import wenge.com.myeyepetizekotlin.ui.activity.ResultActivity
 import wenge.com.myeyepetizekotlin.ui.adapter.SearchAdapter
 import wenge.com.myeyepetizekotlin.utils.hideKeyBoar
 import wenge.com.myeyepetizekotlin.utils.showKeyboar
@@ -29,9 +32,9 @@ class SerachFragment : DialogFragment(), CircularRevealAnim.AnimListener, ViewTr
     lateinit var mRootView: View
     var toggle: Int = -1
 
-    var data : MutableList<String> = arrayListOf("脱口秀","城会玩","666","笑cry","漫威",
-            "清新","匠心","VR","心理学","舞蹈","品牌广告","粉丝自制","电影相关","萝莉","魔性"
-            ,"第一视角","教程","毕业设计","奥斯卡","燃","冰与火之歌","温情","线下campaign","公益")
+    var data: MutableList<String> = arrayListOf("脱口秀", "城会玩", "666", "笑cry", "漫威",
+            "清新", "匠心", "VR", "心理学", "舞蹈", "品牌广告", "粉丝自制", "电影相关", "萝莉", "魔性"
+            , "第一视角", "教程", "毕业设计", "奥斯卡", "燃", "冰与火之歌", "温情", "线下campaign", "公益")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +53,7 @@ class SerachFragment : DialogFragment(), CircularRevealAnim.AnimListener, ViewTr
     }
 
     override fun onStart() {
-        Log.e("SeanchFragment","onStart")
+        Log.e("SeanchFragment", "onStart")
         super.onStart()
         initDialog()
     }
@@ -83,7 +86,7 @@ class SerachFragment : DialogFragment(), CircularRevealAnim.AnimListener, ViewTr
         val width = (metrics.widthPixels * 0.98).toInt() //DialogSearch的宽
         val hight = (metrics.heightPixels * 0.96).toInt()//DialogSearch的高
 //        window!!.setLayout(width, WindowManager.LayoutParams.MATCH_PARENT)
-        window!!.setLayout(width,hight)
+        window!!.setLayout(width, hight)
         window.setGravity(Gravity.TOP)
         window.setWindowAnimations(R.style.DialogEmptyAnimation)//取消过渡动画 , 使DialogSearch的出现更加平滑
     }
@@ -93,23 +96,40 @@ class SerachFragment : DialogFragment(), CircularRevealAnim.AnimListener, ViewTr
      * 即将绘制视图树回调方法
      */
     override fun onPreDraw(): Boolean {
-        Log.e("SeanchFragment","onPreDraw")
+        Log.e("SeanchFragment", "onPreDraw")
         iv_search_search.viewTreeObserver.removeOnPreDrawListener(this);  //移除视图树监听
         mCircularRevealAnim!!.show(iv_search_search, mRootView)
         return true
     }
 
-    fun onFinish(){
+    fun onFinish() {
         hideKeyBoar(et_search_keyword)
-        mCircularRevealAnim!!.hide(iv_search_search,mRootView)
+        mCircularRevealAnim!!.hide(iv_search_search, mRootView)
     }
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.iv_search_back -> onFinish()
 
-            R.id.iv_search_search -> toast("Search")
+            R.id.iv_search_search -> onSerach()
         }
+    }
+
+
+    private fun onSerach() {
+        toast("Search")
+        val text = et_search_keyword.text.toString()
+        if (TextUtils.isEmpty(text)) {
+            toast("请输入关键字")
+            return
+        }
+
+
+        var intent: Intent = Intent(context, ResultActivity::class.java)
+        intent.putExtra("key", text)
+        context.startActivity(intent)
+
+
     }
 
     override fun onHideAnimationEnd() {

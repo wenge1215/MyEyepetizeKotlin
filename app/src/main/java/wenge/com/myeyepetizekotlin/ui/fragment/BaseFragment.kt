@@ -54,7 +54,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     open protected fun onFragmentUserVisble(b: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     abstract fun initView()

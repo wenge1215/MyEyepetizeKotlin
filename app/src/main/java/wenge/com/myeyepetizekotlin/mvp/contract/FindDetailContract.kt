@@ -11,7 +11,7 @@ import wenge.com.myeyepetizekotlin.mvp.model.bean.HotBean
 
 
 interface FindDetailContract {
-    interface FindDetailView : BaseView<HotBean> {
+    interface View : BaseView<HotBean> {
         fun setData(data: HotBean)
     }
 

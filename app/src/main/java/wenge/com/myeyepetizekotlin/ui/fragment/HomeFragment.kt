@@ -15,8 +15,6 @@ import wenge.com.myeyepetizekotlin.mvp.model.bean.VideoBean
 import wenge.com.myeyepetizekotlin.mvp.presenter.HomePresenter
 import wenge.com.myeyepetizekotlin.ui.activity.VideoDetailActivity
 import wenge.com.myeyepetizekotlin.ui.adapter.HomeAdapter
-import wenge.com.myeyepetizekotlin.utils.ObjectSaveUtils
-import wenge.com.myeyepetizekotlin.utils.SPUtils
 import wenge.com.myeyepetizekotlin.utils.getNextPageUrl
 
 /**
@@ -29,7 +27,7 @@ class HomeFragment : BaseFragment(), HomeContract.View, SwipeRefreshLayout.OnRef
     var mList: ArrayList<HomeBean.IssueListBean.ItemListBean> = ArrayList<HomeBean.IssueListBean.ItemListBean>()
     var mPresenter: HomePresenter? = null
     var isRefrash: Boolean = false
-    lateinit var data: String
+    var data: String = ""
     var mAdapter: HomeAdapter? = null
     /**
      * 加载布局
@@ -106,18 +104,18 @@ class HomeFragment : BaseFragment(), HomeContract.View, SwipeRefreshLayout.OnRef
                 data?.consumption?.collectionCount, data?.consumption?.shareCount,
                 data?.consumption?.replyCount, System.currentTimeMillis())
 
-        var url = SPUtils.getInstance(context!!, "beans").getString(playUrl!!)
-        if (url.equals("")) {
-            var count = SPUtils.getInstance(context!!, "beans").getInt("count")
-            if (count != -1) {
-                count = count.inc()
-            } else {
-                count = 1
-            }
-            SPUtils.getInstance(context!!, "beans").put("count", count)
-            SPUtils.getInstance(context!!, "beans").put(playUrl!!, playUrl)
-            ObjectSaveUtils.saveObject(context!!, "bean$count", videoBean)
-        }
+//        var url = SPUtils.getInstance(context!!, "beans").getString(playUrl!!)
+//        if (url.equals("")) {
+//            var count = SPUtils.getInstance(context!!, "beans").getInt("count")
+//            if (count != -1) {
+//                count = count.inc()
+//            } else {
+//                count = 1
+//            }
+//            SPUtils.getInstance(context!!, "beans").put("count", count)
+//            SPUtils.getInstance(context!!, "beans").put(playUrl!!, playUrl)
+//            ObjectSaveUtils.saveObject(context!!, "bean$count", videoBean)
+//        }
         intent.putExtra("data", videoBean as Parcelable)
         context?.let { context -> context.startActivity(intent) }
     }
@@ -173,6 +171,4 @@ class HomeFragment : BaseFragment(), HomeContract.View, SwipeRefreshLayout.OnRef
             mPresenter?.start()
         }
     }
-
-
 }

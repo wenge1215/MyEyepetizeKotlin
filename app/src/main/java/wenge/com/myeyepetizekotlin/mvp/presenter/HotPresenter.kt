@@ -12,11 +12,12 @@ import wenge.com.myeyepetizekotlin.utils.applySchedulers
  * 备注：
  */
 
-class HotPresenter(context: Context, hotView: HotContract.HotView): HotContract.Presenter {
+class HotPresenter(context: Context, hotView: HotContract.HotView) : HotContract.Presenter {
 
     private val mHotModel: HotModel by lazy { HotModel() }
     private var mHotView: HotContract.HotView? = null
     var mContext: Context? = null
+
     init {
         mHotView = hotView
         mContext = context
@@ -26,9 +27,9 @@ class HotPresenter(context: Context, hotView: HotContract.HotView): HotContract.
 
     }
 
-    override fun requestData(strategy:String) {
+    override fun requestData(strategy: String) {
         var result: Observable<HotBean>? = mContext.let { mHotModel.getData(it!!, strategy) }
-        result?.applySchedulers()!!.subscribe { hotBean:HotBean ->
+        result?.applySchedulers()!!.subscribe { hotBean: HotBean ->
             mHotView?.setData(hotBean)
         }
     }

@@ -22,8 +22,6 @@ import wenge.com.myeyepetizekotlin.mvp.model.bean.VideoBean
 import wenge.com.myeyepetizekotlin.mvp.presenter.HotPresenter
 import wenge.com.myeyepetizekotlin.ui.activity.VideoDetailActivity
 import wenge.com.myeyepetizekotlin.ui.adapter.RnakRecycleAdapte
-import wenge.com.myeyepetizekotlin.utils.ObjectSaveUtils
-import wenge.com.myeyepetizekotlin.utils.SPUtils
 
 class RnakFragment : Fragment(), HotContract.HotView {
     var mList: ArrayList<HotBean.ItemListBean.DataBean> = ArrayList()
@@ -105,18 +103,18 @@ class RnakFragment : Fragment(), HotContract.HotView {
                 it?.consumption?.collectionCount, it?.consumption?.shareCount,
                 it?.consumption?.replyCount, System.currentTimeMillis())
 
-        var url = SPUtils.getInstance(context!!, "beans").getString(playUrl!!)
-        if (url.equals("")) {
-            var count = SPUtils.getInstance(context!!, "beans").getInt("count")
-            if (count != -1) {
-                count = count.inc()
-            } else {
-                count = 1
-            }
-            SPUtils.getInstance(context!!, "beans").put("count", count)
-            SPUtils.getInstance(context!!, "beans").put(playUrl!!, playUrl)
-            ObjectSaveUtils.saveObject(context!!, "bean$count", videoBean)
-        }
+//        var url = SPUtils.getInstance(context!!, "beans").getString(playUrl!!)
+//        if (url.equals("")) {
+//            var count = SPUtils.getInstance(context!!, "beans").getInt("count")
+//            if (count != -1) {
+//                count = count.inc()
+//            } else {
+//                count = 1
+//            }
+//            SPUtils.getInstance(context!!, "beans").put("count", count)
+//            SPUtils.getInstance(context!!, "beans").put(playUrl!!, playUrl)
+//            ObjectSaveUtils.saveObject(context!!, "bean$count", videoBean)
+//        }
         intent.putExtra("data", videoBean as Parcelable)
         context?.let { context -> context.startActivity(intent) }
     }
