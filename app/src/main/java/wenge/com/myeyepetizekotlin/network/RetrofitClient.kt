@@ -46,13 +46,12 @@ class RetrofitClient private constructor(context: Context, baseUrl: String) {
          */
         okHttpClient = OkHttpClient.Builder()
                 .addNetworkInterceptor(loggingInterceptor)
+                .cache(cache)
                 .addInterceptor(CacheInterceptor(context))
                 .addNetworkInterceptor(CacheInterceptor(context))
-                .cache(cache)
                 .connectTimeout(DEFORE_TIME, TimeUnit.SECONDS)
                 .writeTimeout(DEFORE_TIME, TimeUnit.SECONDS)
                 .build()
-
 
         /**
          * retrofit 对象

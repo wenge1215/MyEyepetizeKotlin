@@ -147,6 +147,9 @@ class VideoDetailActivity : AppCompatActivity() {
         tv_video_favor.text = bean?.collect.toString()
         tv_video_share.text = bean?.share.toString()
         tv_video_reply.text = bean?.share.toString()
+        /**
+         * 下载监听
+         */
         tv_video_download.setOnClickListener {
             //            //点击下载
 //            var url = bean?.playUrl?.let { it1 -> SPUtils.getInstance(this, "downloads").getString(it1) }

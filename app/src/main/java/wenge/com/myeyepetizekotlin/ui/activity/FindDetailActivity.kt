@@ -24,7 +24,7 @@ import wenge.com.myeyepetizekotlin.utils.goToVideo
 class FindDetailActivity : AppCompatActivity(), FindDetailContract.View, SwipeRefreshLayout.OnRefreshListener {
     val Tag: String = "FindDetailActivity"
     var type: String = ""
-    lateinit var nextPage: String
+     var nextPage:String =  ""
     var mList: ArrayList<HotBean.ItemListBean.DataBean> = ArrayList()
     var mAdapter: RnakRecycleAdapte? = null
     var isRefresh: Boolean = true

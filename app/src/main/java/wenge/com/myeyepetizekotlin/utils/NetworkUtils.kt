@@ -55,7 +55,7 @@ object NetworkUtils {
     fun isAvailableByPing(ip: String?): Boolean {
         var ip = ip
         if (ip == null || ip.length <= 0) {
-            ip = "223.5.5.5"// 阿里巴巴公共ip
+            ip = "202.108.22.5"// 百度公共ip
         }
         val result = ShellUtils.execCmd(String.format("ping -c 1 %s", ip), false)
         val ret = result.result == 0

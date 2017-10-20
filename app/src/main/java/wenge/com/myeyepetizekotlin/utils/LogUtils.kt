@@ -8,24 +8,36 @@ import org.jetbrains.anko.*
  */
 
 
-object LogUtils:AnkoLogger{
+object LogUtils : AnkoLogger {
+    val b: Boolean = true
+
     fun av(str: Any?) {
-        verbose(str)
+        if (b) {
+            verbose(str)
+        }
     }
 
     fun ad(str: Any?) {
-        debug(str)
+        if (b) {
+            debug(str)
+        }
     }
 
-    fun  ai(str: Any?) {
-        info(str)
+    fun ai(str: Any?) {
+        if (b) {
+            info(str)
+        }
     }
 
     fun aw(str: Any?) {
-        warn(str)
+        if (b) {
+            warn(str)
+        }
     }
 
     fun ae(str: Any?) {
-        error(str)
+        if (b) {
+            error(str)
+        }
     }
 }
