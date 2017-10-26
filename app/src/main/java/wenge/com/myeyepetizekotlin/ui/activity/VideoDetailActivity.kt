@@ -33,10 +33,13 @@ class VideoDetailActivity : AppCompatActivity() {
     var isPause: Boolean = false
     var disposable: Disposable? = null
 
+    var download: Disposable? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_detial)
         bean = intent.getParcelableExtra<VideoBean>("data")
+        initDownload(bean?.playUrl)
         initView()
         prepareVideo()
     }
@@ -69,7 +72,7 @@ class VideoDetailActivity : AppCompatActivity() {
                 super.onPrepared(url, *objects)
                 //开始播放了才能旋转和全屏
                 orientationUtils.isEnable = true
-                isPlay = true;
+                isPlay = true
             }
 
             override fun onAutoComplete(url: String?, vararg objects: Any?) {
@@ -93,34 +96,40 @@ class VideoDetailActivity : AppCompatActivity() {
         gsy_player.backButton.setOnClickListener(View.OnClickListener {
             onBackPressed()
         })
-        /**
-         * 播放监听
-         */
-        gsy_player.startButton.setOnClickListener {
-            Thread(Runnable {
-                Log.e("thread", Thread.currentThread().name)
-                var playSet = SPUtils.getInstance(this, "beans").getStringSet("playSet", HashSet()) as HashSet
-                Log.e("playSet", playSet.toString())
-                if (!playSet.contains(bean!!.playUrl)) {
-                    bean!!.playUrl?.let { it1 ->
-                        playSet.add(it1)
-                        SPUtils.getInstance(this, "beans").put("playSet", playSet)
-                        ObjectSaveUtils.saveObject(this, "beans"+ urlToKey(it1), bean!!)
-                    }
-                } else {
-                    Log.e("VideoDetial", "播放记录以存在")
+//        /**
+//         * 播放监听
+//         */
+//        gsy_player.startButton.setOnClickListener {
+//            saveToSetInBack()
+//        }
+
+    }
+
+    /**
+     * 保存Set
+     */
+    private fun saveToSetInBack() {
+        Thread(Runnable {
+            Log.e("thread", Thread.currentThread().name)
+            var playSet = SPUtils.getInstance(this, "beans").getStringSet("playSet", HashSet()) as HashSet
+            Log.e("playSet", playSet.toString())
+            if (!playSet.contains(bean!!.playUrl)) {
+                bean!!.playUrl?.let { it1 ->
+                    //                        playSet.add(it1)
+                    var urls = HashSet<String>(playSet)
+                    urls.add(it1)
+                    SPUtils.getInstance(this, "beans").put("playSet", urls)
+                    ObjectSaveUtils.saveObject(this, "beans" + urlToKey(it1), bean!!)
                 }
+            } else {
+                Log.e("VideoDetial", "播放记录以存在")
+            }
 
-            }).start()
-        }
-
+        }).start()
     }
 
     private fun initView() {
 //        getCView()
-        initDownload(bean?.playUrl)
-
-
         var bgUrl = bean?.blurred
         bgUrl?.let { ImageLoadUtils.display(this, bgUrl, iv_bottom_bg) }
         tv_video_desc.text = bean?.description
@@ -151,73 +160,66 @@ class VideoDetailActivity : AppCompatActivity() {
          * 下载监听
          */
         tv_video_download.setOnClickListener {
-            //            //点击下载
-//            var url = bean?.playUrl?.let { it1 -> SPUtils.getInstance(this, "downloads").getString(it1) }
-//            if (url.equals("")) {
-//                var count = SPUtils.getInstance(this, "downloads").getInt("count")
-//                if (count != -1) {
-//                    count = count.inc()
-//                } else {
-//                    count = 1
-//                }
-//                SPUtils.getInstance(this, "downloads").put("count", count)
-//                ObjectSaveUtils.saveObject(this, "download$count", this!!.bean!!)
-//                addMission(bean?.playUrl, count)
-//            } else {
-//                toast("该视频已经缓存过了")
-//            }
+            saveDLToStrInBack()
+        }
+    }
 
+    /**
+     * 保村下载路径  String
+     */
+    private fun saveDLToStrInBack() {
+        addMission()
+    }
 
-            var urlSet = SPUtils.getInstance(this, "download").getStringSet("urlSet", HashSet()) as HashSet
-            Log.e("urlSet", urlSet.size.toString())
-            if (!urlSet.contains(bean?.playUrl)) {
-                bean?.playUrl?.let { it1 ->
-                    urlSet.add(it1)
-                    SPUtils.getInstance(this, "download").put("urlSet", urlSet)
-                    ObjectSaveUtils.saveObject(this, "download"+urlToKey(it1), this!!.bean!!)
-                }
-
+    private fun download() {
+        var play = SPUtils.getInstance(this, "download").getString("urlSet")
+        if (play.contains(",")) {
+            if (!play.contains(bean!!.playUrl!!)) {
+                var sb = StringBuffer()
+                sb.append(play).append(",").append(bean!!.playUrl)
+                //保存下载记录
+                SPUtils.getInstance(this, "download").put("urlSet", sb.toString())
+                ObjectSaveUtils.saveObject(this, "download" + urlToKey(bean!!.playUrl!!), this!!.bean!!)
+                //下载
+                startLoad()
             } else {
                 toast("该视频已经缓存过了")
             }
+        } else {
+            if (play.length == 0) {
+                bean!!.playUrl?.let { SPUtils.getInstance(this, "download").put("urlSet", it) }
+                ObjectSaveUtils.saveObject(this, "download" + urlToKey(bean!!.playUrl!!), this!!.bean!!)
+                startLoad()
+            } else {
+                if (!play.equals(bean!!.playUrl)) {
+                    var sb = StringBuffer()
+                    sb.append(play).append(",").append(bean!!.playUrl)
+                    SPUtils.getInstance(this, "download").put("urlSet", sb.toString())
+                    ObjectSaveUtils.saveObject(this, "download" + urlToKey(bean!!.playUrl!!), this!!.bean!!)
+                    startLoad()
+                } else {
+                    toast("该视频已经缓存过了")
+                }
+            }
         }
+    }
+
+    private fun startLoad() {
+        RxDownload.start(bean!!.playUrl!!).subscribe()
     }
 
     private fun initDownload(playUrl: String?) {
+        Log.e("initDownload", playUrl)
 
-        RxDownload.create(playUrl!!)
+        download =  RxDownload.create(playUrl!!)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { it ->
-                    System.out.print("MAX:" + it.totalSize)
-                    Log.e("RxDownload", it.totalSize.toString())
-                }
-    }
-
-    private fun getCView() {
-        Log.w("getCView", "进来了")
-        val childCount = gsy_player.childCount
-        for (i in 0..(childCount - 1)) {
-            Log.w("getCView", childCount.toString())
-            gsy_player.getChildAt(i)
-            val childAt: View = gsy_player.getChildAt(i)
-
-            Log.w("getCView", childAt.id.toString())
-            if (childAt.id == R.id.back) {
-                val view = childAt as ImageView
-                Log.w("getCView", "if")
-                view.setImageResource(R.drawable.back)
-                Log.w("getCView", "执行完毕")
-            }
-        }
-
-
+                .subscribe()
     }
 
     /**
      * 下载
      */
-    private fun addMission(playUrl: String?, count: Int) {
-        Log.e("addMission", playUrl)
+    private fun addMission() {
         var rxPermiss: RxPermissions = RxPermissions(this)
 
         rxPermiss.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -225,11 +227,7 @@ class VideoDetailActivity : AppCompatActivity() {
                     Log.e("RxDownload", granted.toString())
                     if (granted) { // Always true pre-M
                         toast("开始下载")
-                        var urlSet: ArrayList<String> = ArrayList()
-                        urlSet.add(playUrl!!)
-                        SPUtils.getInstance(this, "download").put("urlSet", "")
-                        RxDownload.start(playUrl!!).subscribe()
-
+                        download()
                     } else {
                         // Oups permission denied
                         toast("没有读写权限")
@@ -264,5 +262,6 @@ class VideoDetailActivity : AppCompatActivity() {
         orientationUtils?.let {
             orientationUtils.releaseListener()
         }
+        download?.dispose()
     }
 }

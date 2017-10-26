@@ -22,7 +22,7 @@ class ResultActivity : AppCompatActivity() {
         var immersionBar = ImmersionBar.with(this)
         immersionBar?.statusBarColor(R.color.colorAccent)?.barAlpha(0.2f)?.fitsSystemWindows(true)?.statusBarDarkFont(true)?.init()
         tb_result.title = StringBuilder().append("'").append(key).append("'").append(" 相关").toString()
-        tb_result.setNavigationIcon(R.drawable.back)
+        tb_result.setNavigationIcon(R.drawable.back_dark)
         tb_result.setBackgroundColor(R.color.colorAccent)
         tb_result.setNavigationOnClickListener { finish() }
 

@@ -38,6 +38,8 @@
         </activity>
         <activity android:name=".ui.activity.CacheActivity">
         </activity>
+        <activity android:name=".ui.activity.TestActivity">
+        </activity>
     </application>
 
 </manifest>

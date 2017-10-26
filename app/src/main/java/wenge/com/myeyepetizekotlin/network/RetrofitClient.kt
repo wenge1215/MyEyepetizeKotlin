@@ -51,6 +51,7 @@ class RetrofitClient private constructor(context: Context, baseUrl: String) {
                 .addNetworkInterceptor(CacheInterceptor(context))
                 .connectTimeout(DEFORE_TIME, TimeUnit.SECONDS)
                 .writeTimeout(DEFORE_TIME, TimeUnit.SECONDS)
+                .followRedirects(true)
                 .build()
 
         /**

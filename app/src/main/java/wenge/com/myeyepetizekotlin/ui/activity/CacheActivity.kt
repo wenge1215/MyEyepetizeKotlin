@@ -8,27 +8,27 @@ import android.os.Handler
 import android.os.Message
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
+import android.widget.Toast
 import com.gyf.barlibrary.ImmersionBar
 import kotlinx.android.synthetic.main.activity_cache.*
 import wenge.com.myeyepetizekotlin.R
 import wenge.com.myeyepetizekotlin.mvp.model.bean.VideoBean
 import wenge.com.myeyepetizekotlin.ui.adapter.DownLoadAdapter
-import wenge.com.myeyepetizekotlin.utils.LogUtils
 import wenge.com.myeyepetizekotlin.utils.ObjectSaveUtils
 import wenge.com.myeyepetizekotlin.utils.SPUtils
 import wenge.com.myeyepetizekotlin.utils.urlToKey
 
 class CacheActivity : AppCompatActivity() {
-    lateinit var mAdapter: DownLoadAdapter
+
+    var mAdapter: DownLoadAdapter? = null
     var datas = ArrayList<VideoBean>()
 
     var mHandler: Handler = @SuppressLint("HandlerLeak")
     object : Handler() {
         override fun handleMessage(msg: Message?) {
             super.handleMessage(msg)
-            datas = msg?.data as ArrayList<VideoBean>
-            mAdapter.notifyDataSetChanged()
+            datas.addAll(msg?.data?.getParcelableArrayList<VideoBean>("beans")!!)
+            mAdapter?.notifyDataSetChanged()
         }
     }
 
@@ -41,25 +41,14 @@ class CacheActivity : AppCompatActivity() {
     @SuppressLint("ResourceAsColor")
     private fun init() {
         initTitle()
-        mAdapter = DownLoadAdapter(datas)
-        DownLoadAsyn(applicationContext, mHandler).execute()
-//        initData()
         initRV()
-    }
+        DownLoadAsyn(applicationContext, mHandler).execute()
 
-    private fun initData() {
-        var datas = ArrayList<VideoBean>()
-        var urlSet = SPUtils.getInstance(this, "download").getStringSet("urlSet") as Set<String>
-        Log.e("doInBackground", urlSet.toString())
-        for (str in urlSet) {
-            var data = ObjectSaveUtils.getValue(this, "download" + urlToKey(str)) as VideoBean
-            datas.add(data)
-        }
-        LogUtils.aw(datas.toString())
     }
 
     private fun initRV() {
-        rv_cach.layoutManager = LinearLayoutManager(this, 1, false)
+        mAdapter = DownLoadAdapter(datas)
+        rv_cach.layoutManager = LinearLayoutManager(this)
         rv_cach.adapter = mAdapter
     }
 
@@ -81,18 +70,32 @@ class CacheActivity : AppCompatActivity() {
          */
         override fun doInBackground(vararg params: Void?): ArrayList<VideoBean> {
             var datas = ArrayList<VideoBean>()
-            var urlSet = SPUtils.getInstance(context, "download").getStringSet("urlSet") as Set<String>
-            for (str in urlSet) {
-                var data = ObjectSaveUtils.getValue(context, "download" + urlToKey(str)) as VideoBean
-                datas.add(data)
+            var url = SPUtils.getInstance(context, "download").getString("urlSet")
+//            Log.e("url", url)
+            if (url.contains(",")) {
+                var urls = url.split(",")
+                if (urls.size > 1) {
+                    for (s in urls) {
+//                        Log.e("urls", s)
+                        var data: VideoBean? = ObjectSaveUtils.getValue(context, "download" + urlToKey(s)) as VideoBean
+                        datas.add(data!!)
+                    }
+                }
+            } else {
+                if (url.length == 0) {
+                    Toast.makeText(context, "没有下载", Toast.LENGTH_SHORT).show()
+                } else {
+                    var data = ObjectSaveUtils.getValue(context, "download" + urlToKey(url)) as VideoBean
+                    datas.add(data)
+                }
             }
             return datas
         }
 
-        override fun onPostExecute(result: ArrayList<VideoBean>?) {
+        override fun onPostExecute(result: ArrayList<VideoBean>) {
 
             super.onPostExecute(result)
-            LogUtils.aw(result.toString())
+//            Log.w("urlSet", result.toString())
             var b = Bundle()
             b.putParcelableArrayList("beans", result)
             var msg = handler.obtainMessage()
@@ -100,6 +103,11 @@ class CacheActivity : AppCompatActivity() {
             handler.sendMessage(msg)
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
 }
 
 

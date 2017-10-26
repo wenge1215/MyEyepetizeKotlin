@@ -7,6 +7,7 @@ import android.view.View
 import kotlinx.android.synthetic.main.fragment_mine.*
 import wenge.com.myeyepetizekotlin.R
 import wenge.com.myeyepetizekotlin.ui.activity.CacheActivity
+import wenge.com.myeyepetizekotlin.ui.activity.TestActivity
 
 /**
  * Created by WENGE on 2017/9/5.
@@ -20,7 +21,9 @@ class MineFragment : BaseFragment(), View.OnClickListener {
             R.id.tv_save ->
                 startActivity(Intent(context, CacheActivity::class.java))
             R.id.tv_watch -> Log.e("Tag", "tv_watch")
-            R.id.tv_advise -> Log.e("Tag", "tv_advise")
+            R.id.tv_advise ->
+                startActivity(Intent(context, TestActivity::class.java))
+
         }
     }
 
