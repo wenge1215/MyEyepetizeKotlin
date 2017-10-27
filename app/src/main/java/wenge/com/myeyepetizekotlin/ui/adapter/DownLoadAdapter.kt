@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.item_download.view.*
 import wenge.com.myeyepetizekotlin.R
@@ -36,7 +35,7 @@ class DownLoadAdapter(val datas: ArrayList<VideoBean>) : RecyclerView.Adapter<Do
 
     override fun getItemCount(): Int = datas.size
 
-    class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView), View.OnLongClickListener {
+    class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView){
         var isDownLoad: Boolean = true
         var currentStatus = Status()
         var datas: ArrayList<VideoBean>? = null
@@ -64,34 +63,13 @@ class DownLoadAdapter(val datas: ArrayList<VideoBean>) : RecyclerView.Adapter<Do
          */
         private fun setItemAction(itemView: View?) {
             /**
-             * 长按事件
-             */
-            itemView?.setOnLongClickListener(this)
-            /**
              * 点击事件
              */
             itemView?.setOnClickListener {
-
-
             }
         }
 
-        /**
-         * 长按事件
-         */
-        override fun onLongClick(v: View?): Boolean {
-            Toast.makeText(v?.context, this.adapterPosition.toString(), Toast.LENGTH_SHORT).show()
-            delete()
-            return true
-        }
 
-        private fun delete() {
-//            datas?.get(this.adapterPosition)?.playUrl?.let { RxDownload.delete(it).subscribe() }
-//            datas?.removeAt(adapterPosition)
-//            LogUtils.ae("delete    " + delI?.javaClass?.canonicalName)
-//            delI?.onDelete(this.adapterPosition)
-//            RxBus.get().post("delete")
-        }
 
         private fun setStateAction(iv_download_state: ImageView) {
             iv_download_state.setOnClickListener {
@@ -125,6 +103,9 @@ class DownLoadAdapter(val datas: ArrayList<VideoBean>) : RecyclerView.Adapter<Do
                 if (loadS == totalS && totalS > 0) {
                     itemView.pb_load.visibility = View.GONE
                 }
+
+
+
             }
         }
 
@@ -167,22 +148,6 @@ class DownLoadAdapter(val datas: ArrayList<VideoBean>) : RecyclerView.Adapter<Do
         private fun stop() {
             datas?.get(this.adapterPosition)?.playUrl?.let { RxDownload.stop(it).subscribe() }
         }
-
-//        var delI: ActionInterface? = null
-//
-//        interface ActionInterface {
-//            fun onDelete(adapterPosition: Int)
-//        }
-//
-//        public fun setInterface(l: ActionInterface) {
-//            delI = l
-//        }
-//
-//    }
-//
-//    fun getViewHolder(): ViewHolder? {
-//        return vd
-//    }
     }
 
 }
