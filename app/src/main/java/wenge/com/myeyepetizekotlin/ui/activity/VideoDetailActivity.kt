@@ -34,6 +34,7 @@ class VideoDetailActivity : AppCompatActivity() {
     var disposable: Disposable? = null
 
     var download: Disposable? = null
+    lateinit var mPlayUrl: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +42,23 @@ class VideoDetailActivity : AppCompatActivity() {
         bean = intent.getParcelableExtra<VideoBean>("data")
         initDownload(bean?.playUrl)
         initView()
+        isSave()
         prepareVideo()
     }
 
+
+    private fun isSave() {
+        var play = SPUtils.getInstance(this, "download").getString("urlSet")
+        if (play.contains(bean?.playUrl.toString())) {
+            var file = RxDownload.file(bean?.playUrl.toString()).blockingGet()
+            mPlayUrl = file.toURI().toString()
+        } else {
+            mPlayUrl = bean?.playUrl.toString()
+        }
+    }
+
     private fun prepareVideo() {
-        gsy_player.setUp(bean?.playUrl, true, null, null)
+        gsy_player.setUp(mPlayUrl, true, null, null)
         var imageView = ImageView(this)
         imageView.scaleType = ImageView.ScaleType.CENTER_CROP
         ImageLoadUtils.display(this, bean?.feed!!, imageView)
@@ -96,13 +109,6 @@ class VideoDetailActivity : AppCompatActivity() {
         gsy_player.backButton.setOnClickListener(View.OnClickListener {
             onBackPressed()
         })
-//        /**
-//         * 播放监听
-//         */
-//        gsy_player.startButton.setOnClickListener {
-//            saveToSetInBack()
-//        }
-
     }
 
     /**
@@ -211,7 +217,7 @@ class VideoDetailActivity : AppCompatActivity() {
     private fun initDownload(playUrl: String?) {
         Log.e("initDownload", playUrl)
 
-        download =  RxDownload.create(playUrl!!)
+        download = RxDownload.create(playUrl!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
     }

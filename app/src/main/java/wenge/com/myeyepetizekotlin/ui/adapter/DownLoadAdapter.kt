@@ -1,18 +1,23 @@
 package wenge.com.myeyepetizekotlin.ui.adapter
 
+import android.content.Intent
+import android.os.Parcelable
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.item_download.view.*
 import wenge.com.myeyepetizekotlin.R
 import wenge.com.myeyepetizekotlin.mvp.model.bean.VideoBean
+import wenge.com.myeyepetizekotlin.ui.activity.VideoDetailActivity
 import wenge.com.myeyepetizekotlin.utils.ImageLoadUtils
 import wenge.com.myeyepetizekotlin.utils.LogUtils
 import zlc.season.rxdownload3.RxDownload
 import zlc.season.rxdownload3.core.*
+import zlc.season.rxdownload3.core.DownloadConfig.context
 
 /**
  * Created by WENGE on 2017/10/20.
@@ -35,7 +40,7 @@ class DownLoadAdapter(val datas: ArrayList<VideoBean>) : RecyclerView.Adapter<Do
 
     override fun getItemCount(): Int = datas.size
 
-    class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView){
+    class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         var isDownLoad: Boolean = true
         var currentStatus = Status()
         var datas: ArrayList<VideoBean>? = null
@@ -66,9 +71,15 @@ class DownLoadAdapter(val datas: ArrayList<VideoBean>) : RecyclerView.Adapter<Do
              * 点击事件
              */
             itemView?.setOnClickListener {
+
+                Toast.makeText(context, "setOnClickListener", Toast.LENGTH_SHORT).show()
+                RxDownload.file("")
+
+                var intent: Intent = Intent(context, VideoDetailActivity::class.java)
+                intent.putExtra("data", datas?.get(adapterPosition) as Parcelable)
+                context.startActivity(intent)
             }
         }
-
 
 
         private fun setStateAction(iv_download_state: ImageView) {
@@ -103,9 +114,6 @@ class DownLoadAdapter(val datas: ArrayList<VideoBean>) : RecyclerView.Adapter<Do
                 if (loadS == totalS && totalS > 0) {
                     itemView.pb_load.visibility = View.GONE
                 }
-
-
-
             }
         }
 
