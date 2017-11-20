@@ -26,12 +26,20 @@ class CacheInterceptor(context: Context) : Interceptor {
             val maxAge: Int
             val cacheControl: String
 
-            response = chain?.proceed(request)
-            // read from cache for 60 s (在线缓存过期时间)
-            maxAge = 60
-            cacheControl = request?.cacheControl().toString()
-            Log.e("CacheInterceptor", "6s load cahe" + cacheControl)
-            return response?.newBuilder()?.removeHeader("Pragma")?.removeHeader("Cache-Control")?.header("Cache-Control", "public, max-age=" + maxAge)?.build()
+            try {
+                response = chain?.proceed(request)
+                // read from cache for 60 s (在线缓存过期时间)
+                maxAge = 60
+                cacheControl = request?.cacheControl().toString()
+                Log.e("CacheInterceptor", "6s load cahe" + cacheControl)
+                return response?.newBuilder()
+                        ?.removeHeader("Pragma")
+                        ?.removeHeader("Cache-Control")
+                        ?.header("Cache-Control", "public, max-age=" + maxAge)
+                        ?.build()
+            } catch (e: Exception) {
+                return null
+            }
 
 
         } else {
@@ -40,31 +48,12 @@ class CacheInterceptor(context: Context) : Interceptor {
             val response = chain?.proceed(request)
             //set cahe times is 3 days (离线缓存过期时间)
             val maxStale = 60 * 60 * 24 * 3
-            return response?.newBuilder()?.removeHeader("Pragma")?.removeHeader("Cache-Control")?.header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)?.build()
+            return response?.newBuilder()
+                    ?.removeHeader("Pragma")
+                    ?.removeHeader("Cache-Control")
+                    ?.header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
+                    ?.build()
         }
+        return null;
     }
-//        var request = chain?.request()
-//        if (NetworkUtils.isNetConneted(context)) {
-//            Log.w("", "网络已连接")
-//            try {
-//                val response = chain?.proceed(request)
-//                // read from cache for 60 s
-//                val maxAge = 60
-//                val cacheControl = request?.cacheControl().toString()
-//                Log.e("CacheInterceptor", "6s load cahe" + cacheControl)
-//                return response?.newBuilder()?.removeHeader("Pragma")?.removeHeader("Cache-Control")?.header("Cache-Control", "public, max-age=" + maxAge)?.build()
-//            } catch (e: Exception) {
-//                return null
-//            }
-//        } else {
-//            Log.e("CacheInterceptor", " no network load cahe")
-//            request = request?.newBuilder()?.cacheControl(CacheControl.FORCE_CACHE)?.build()
-//            val response = chain?.proceed(request)
-//            //set cahe times is 3 days  设置本地缓存时间
-//            val maxStale = 60 * 60 * 24 * 3
-//            return response?.newBuilder()?.removeHeader("Pragma")?.removeHeader("Cache-Control")?.header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)?.build()
-//        }
-//        return null
-//    }
-
 }

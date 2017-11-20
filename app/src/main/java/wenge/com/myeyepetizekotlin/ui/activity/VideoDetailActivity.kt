@@ -50,8 +50,13 @@ class VideoDetailActivity : AppCompatActivity() {
     private fun isSave() {
         var play = SPUtils.getInstance(this, "download").getString("urlSet")
         if (play.contains(bean?.playUrl.toString())) {
-            var file = RxDownload.file(bean?.playUrl.toString()).blockingGet()
-            mPlayUrl = file.toURI().toString()
+            try {
+                var file = RxDownload.file(bean?.playUrl.toString()).blockingGet()
+                mPlayUrl = file.toURI().toString()
+            } catch (e: Exception) {
+                LogUtils.aw("尚未下载完成")
+                mPlayUrl = bean?.playUrl.toString()
+            }
         } else {
             mPlayUrl = bean?.playUrl.toString()
         }
@@ -171,7 +176,7 @@ class VideoDetailActivity : AppCompatActivity() {
     }
 
     /**
-     * 保村下载路径  String
+     * 保存下载路径  String
      */
     private fun saveDLToStrInBack() {
         addMission()

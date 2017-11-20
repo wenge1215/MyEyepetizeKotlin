@@ -1,6 +1,7 @@
 package wenge.com.myeyepetizekotlin.network
 
 import android.content.Context
+import android.util.Log
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -17,8 +18,8 @@ import java.util.concurrent.TimeUnit
  */
 
 class RetrofitClient private constructor(context: Context, baseUrl: String) {
-    val context: Context = context
-    val DEFORE_TIME: Long = 10
+    val mContext: Context = context
+    val DEFORE_TIME: Long = 20
     var httpCacheDirectory: File? = null
     var cache: Cache? = null    //okhttp缓存对象
     var okHttpClient: OkHttpClient? = null
@@ -30,11 +31,16 @@ class RetrofitClient private constructor(context: Context, baseUrl: String) {
      */
     init {
         if (httpCacheDirectory == null) {
-            httpCacheDirectory = File(context.cacheDir, "app_cache")
+            httpCacheDirectory = File(mContext.cacheDir, "app_cache")
         }
-        if (cache == null) {
-            cache = Cache(httpCacheDirectory, 10 * 1024 * 1024)
+        try {
+            if (cache == null) {
+                cache = Cache(httpCacheDirectory, 10 * 1024 * 1024)
+            }
+        } catch (e: Exception) {
+            Log.e("OKHttp", "Could not create http cache", e)
         }
+
 
         /**
          * 日志拦截器

@@ -13,35 +13,61 @@ import android.util.Log
 
 object NetworkUtils {
 
-    /**
-     * 网络是否可用
-     */
-    fun isNetConneted(context: Context): Boolean {
-        val connecManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager       //as 用于类型装换
-        val networkInfo: NetworkInfo? = connecManager.activeNetworkInfo
-        if (networkInfo == null) {
-            return false
-        } else {
-            return networkInfo.isConnected && isAvailableByPing(null)
-        }
-    }
-
-    /**
-     * 指定类型的网络是否可用
-     */
-    fun isNetworkkConneted(context: Context, netType: Int): Boolean {
-        if (!isNetConneted(context)) {
-            return false
-        }
+    fun isNetConneted(context: Context):Boolean{
         val connectManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo: NetworkInfo? = connectManager.getNetworkInfo(netType)
-        if (networkInfo == null) {
+        val networkInfo : NetworkInfo?= connectManager.activeNetworkInfo
+        System.out.println(networkInfo?.isAvailable)
+        System.out.println(networkInfo?.isConnected)
+        if(networkInfo==null){
+            return  false
+        }else{
+            return networkInfo.isAvailable&& networkInfo.isConnected
+        }
+
+    }
+
+    fun isNetworkConnected(context: Context,typeMoblie : Int): Boolean{
+        if(!isNetConneted(context)){
             return false
-        } else {
-            return networkInfo.isConnected && isAvailableByPing(null)
+        }
+        val connectManager  = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo : NetworkInfo = connectManager.getNetworkInfo(typeMoblie)
+        if(networkInfo==null){
+            return false;
+        }else{
+            return  networkInfo.isConnected && networkInfo.isAvailable
         }
     }
 
+//    /**
+//     * 网络是否可用
+//     */
+//    fun isNetConneted(context: Context): Boolean {
+//        val connecManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager       //as 用于类型装换
+//        val networkInfo: NetworkInfo? = connecManager.activeNetworkInfo
+//        if (networkInfo == null) {
+//            return false
+//        } else {
+//            return networkInfo.isConnected && isAvailableByPing(null)
+//        }
+//    }
+//
+//    /**
+//     * 指定类型的网络是否可用
+//     */
+//    fun isNetworkConnected(context: Context, netType: Int): Boolean {
+//        if (!isNetConneted(context)) {
+//            return false
+//        }
+//        val connectManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+//        val networkInfo: NetworkInfo? = connectManager.getNetworkInfo(netType)
+//        if (networkInfo == null) {
+//            return false
+//        } else {
+//            return networkInfo.isConnected && isAvailableByPing(null)
+//        }
+//    }
+//
     /**
      * 判断网络是否可用
      *
@@ -51,6 +77,9 @@ object NetworkUtils {
      *
      * @param ip ip地址（自己服务器ip），如果为空，ip为阿里巴巴公共ip
      * @return `true`: 可用<br></br>`false`: 不可用
+     *
+     *
+     * 调用该方法判断网络，会造成504错误
      */
     fun isAvailableByPing(ip: String?): Boolean {
         var ip = ip
@@ -73,7 +102,7 @@ object NetworkUtils {
      */
     fun isPhoneNetConneted(context: Context): Boolean {
         val netType: Int = ConnectivityManager.TYPE_MOBILE
-        return isNetworkkConneted(context, netType)
+        return isNetworkConnected(context, netType)
     }
 
     /**
@@ -81,7 +110,7 @@ object NetworkUtils {
      */
     fun isWifiNetConnneted(context: Context): Boolean {
         val netType = ConnectivityManager.TYPE_WIFI
-        return isNetworkkConneted(context, netType)
+        return isNetworkConnected(context, netType)
     }
 
 }

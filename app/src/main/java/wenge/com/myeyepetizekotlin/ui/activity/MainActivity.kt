@@ -1,5 +1,6 @@
 package wenge.com.myeyepetizekotlin.ui.activity
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.graphics.Typeface
 import android.os.Bundle
@@ -10,7 +11,9 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.gyf.barlibrary.ImmersionBar
 import com.roughike.bottombar.OnTabSelectListener
+import com.tbruyelle.rxpermissions2.RxPermissions
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.toast
 import wenge.com.myeyepetizekotlin.R
 import wenge.com.myeyepetizekotlin.ui.fragment.*
 import java.util.*
@@ -46,6 +49,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnTabSelectListe
         initToolbar()
         initFragmetn(savedInstanceState)
         initView()
+        initPremiss()
+    }
+
+    private fun initPremiss() {
+        var rxPermissions: RxPermissions = RxPermissions(this)
+        rxPermissions
+                .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe({ granted ->
+                    if (granted) { // Always true pre-M
+                        // I can control the camera now
+                    } else {
+                        toast("申请权限失败")
+                    }
+                })
     }
 
     private fun initView() {
