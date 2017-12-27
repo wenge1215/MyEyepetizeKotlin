@@ -76,6 +76,7 @@ class DownLoadAdapter(val datas: ArrayList<VideoBean>) : RecyclerView.Adapter<Do
                 RxDownload.file("")
 
                 var intent: Intent = Intent(context, VideoDetailActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 intent.putExtra("data", datas?.get(adapterPosition) as Parcelable)
                 context.startActivity(intent)
             }

@@ -1,5 +1,6 @@
 package wenge.com.myeyepetizekotlin.ui.fragment
 
+import android.annotation.SuppressLint
 import android.app.DialogFragment
 import android.content.Intent
 import android.os.Bundle
@@ -22,7 +23,7 @@ import wenge.com.myeyepetizekotlin.utils.showKeyboar
 
 /**
  * Created by WENGE on 2017/9/5.
- * 备注：
+ * 备注：搜索界面
  */
 
 
@@ -31,8 +32,9 @@ class SerachFragment : DialogFragment(), CircularRevealAnim.AnimListener, ViewTr
     var mCircularRevealAnim: CircularRevealAnim? = null
     lateinit var mRootView: View
     var toggle: Int = -1
+    var text: String? = null
 
-    var data: MutableList<String> = arrayListOf("脱口秀", "城会玩", "666", "笑cry", "漫威",
+    var data: MutableList<String> = arrayListOf("吃鸡","脱口秀", "城会玩", "666", "笑cry", "漫威",
             "清新", "匠心", "VR", "心理学", "舞蹈", "品牌广告", "粉丝自制", "电影相关", "萝莉", "魔性"
             , "第一视角", "教程", "毕业设计", "奥斯卡", "燃", "冰与火之歌", "温情", "线下campaign", "公益")
 
@@ -61,6 +63,7 @@ class SerachFragment : DialogFragment(), CircularRevealAnim.AnimListener, ViewTr
     private fun setData() {
         recyclerView.adapter = SearchAdapter(data as ArrayList<String>) {
             toast(it.toString())
+            goToSerach(it.toString())
         }
         val manager = FlexboxLayoutManager()
         //设置主轴排列方式
@@ -116,20 +119,25 @@ class SerachFragment : DialogFragment(), CircularRevealAnim.AnimListener, ViewTr
     }
 
 
+    @SuppressLint("NewApi")
     private fun onSerach() {
-        toast("Search")
-        val text = et_search_keyword.text.toString()
+        text = et_search_keyword.text.toString()
         if (TextUtils.isEmpty(text)) {
             toast("请输入关键字")
             return
         }
 
 
+        goToSerach(text!!)
+
+
+    }
+
+    @SuppressLint("NewApi")
+    private fun goToSerach(text: String) {
         var intent: Intent = Intent(context, ResultActivity::class.java)
         intent.putExtra("key", text)
         context.startActivity(intent)
-
-
     }
 
     override fun onHideAnimationEnd() {

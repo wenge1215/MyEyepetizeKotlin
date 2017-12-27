@@ -46,4 +46,9 @@ interface ApiServer {
     fun getHotData(@Query("num") num: Int, @Query("strategy") strategy: String,
                    @Query("udid") udid: String = "26868b32e808498db32fd51fb422d00175e179df", @Query("vc") vc: Int = 83): Observable<HotBean>
 
+    //获取关键词搜索相关信息
+    @GET("v1/search")
+    fun getSearchData(@Query("num") num :Int,@Query("query") query :String,
+                      @Query("start") start :Int) : Observable<HotBean>
+
 }

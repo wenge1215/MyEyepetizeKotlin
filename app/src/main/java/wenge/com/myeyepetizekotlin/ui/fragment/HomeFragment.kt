@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import kotlinx.android.synthetic.main.fragment_home.*
-import org.jetbrains.anko.support.v4.toast
 import wenge.com.myeyepetizekotlin.R
 import wenge.com.myeyepetizekotlin.mvp.contract.HomeContract
 import wenge.com.myeyepetizekotlin.mvp.model.bean.HomeBean
@@ -51,11 +50,8 @@ class HomeFragment : BaseFragment(), HomeContract.View, SwipeRefreshLayout.OnRef
          * 创建适配器并实现RecyclerView条目点击事件
          */
         mAdapter = HomeAdapter(mList) {
-            toast(it.data?.title.toString())
             //跳转到Video详情界面
             goToVideoDetail(it.data)
-
-
         }
 
         recycler.layoutManager = LinearLayoutManager(context)

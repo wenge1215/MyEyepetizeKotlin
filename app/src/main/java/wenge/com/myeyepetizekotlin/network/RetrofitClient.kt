@@ -8,6 +8,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import zlc.season.rxdownload3.helper.loge
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -24,7 +25,6 @@ class RetrofitClient private constructor(context: Context, baseUrl: String) {
     var cache: Cache? = null    //okhttp缓存对象
     var okHttpClient: OkHttpClient? = null
     var retrofit: Retrofit? = null
-
 
     /**
      * 初始化块
@@ -69,6 +69,9 @@ class RetrofitClient private constructor(context: Context, baseUrl: String) {
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())      //Rxjava 适配器对象，rxjava关联网络请求的结果
                 .build()
+
+
+        loge("初始化快")
 
     }
 
