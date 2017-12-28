@@ -9,7 +9,7 @@ import android.view.animation.DecelerateInterpolator
 
 /**
  * Created by WENGE on 2017/9/5.
- * 备注：
+ * 备注：搜索界面切换动画
  */
 
 
